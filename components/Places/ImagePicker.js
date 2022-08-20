@@ -1,4 +1,4 @@
-import { Button, View, Alert, Image, Text, StyleSheet } from "react-native";
+import { View, Alert, Image, Text, StyleSheet } from "react-native";
 import { Colors } from "../../constants/color";
 import {
   launchCameraAsync,
@@ -6,6 +6,7 @@ import {
   PermissionStatus,
 } from "expo-image-picker";
 import { useState } from "react";
+import OutlinedButton from "../UI/OutllinedButton";
 
 function ImagePicker() {
   const [pickedImage, setPickedImage] = useState();
@@ -41,8 +42,9 @@ function ImagePicker() {
     setPickedImage(image.uri);
   }
 
+  //if there is no image yet then this text shows up
   let imagePreview = <Text>no İmage taken yet.</Text>;
-
+  // else taken image shows up
   if (pickedImage) {
     imagePreview = <Image style={styles.image} source={{ uri: pickedImage }} />;
   }
@@ -50,7 +52,10 @@ function ImagePicker() {
   return (
     <View>
       <View style={styles.imagePreview}>{imagePreview}</View>
-      <Button title="Take Image" onPress={takeImageHandler} />
+      <OutlinedButton icon="camera" onPress={takeImageHandler}>
+        {" "}
+        Take Image
+      </OutlinedButton>
     </View>
   );
 }
