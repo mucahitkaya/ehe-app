@@ -6,8 +6,11 @@ import {
   useForegroundPermissions,
   PermissionStatus,
 } from "expo-location";
+import { useNavigation } from "@react-navigation/native";
 
 function LocationPicker(params) {
+  const navigation = useNavigation();
+
   const [locationPermissionInformation, requestPermission] =
     useForegroundPermissions();
 
@@ -34,10 +37,15 @@ function LocationPicker(params) {
     }
 
     const location = await getCurrentPositionAsync();
-    console.log(location);
+    // setPickedLocation({
+    //     lat:location.coords.latitude,
+    //     lng:location.coords.longitude,
+    // })
   }
 
-  function pickOnMapHandler(params) {}
+  function pickOnMapHandler(params) {
+    navigation.navigate("Map");
+  }
 
   return (
     <View>
