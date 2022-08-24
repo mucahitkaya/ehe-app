@@ -1,8 +1,9 @@
 import MapView, { Marker } from "react-native-maps";
-import { StyleSheet } from "react-native";
-import { useState } from "react";
+import { Alert, StyleSheet } from "react-native";
+import { useCallback, useLayoutEffect, useState } from "react";
+import IconButton from "../components/UI/IconButton";
 
-function Map(params) {
+function Map({ navigation }) {
   const [selectedLocation, setLocatedLocation] = useState();
 
   const region = {
@@ -18,6 +19,35 @@ function Map(params) {
 
     setLocatedLocation({ lat: lat, lng: lng });
   }
+
+  const savePickedLocationHandler = useCallback(() => {
+    if (!selectedLocation) {
+      Alert.alert("No location picked", "Pick a location by typing on a map");
+      return;
+    }
+
+    // screen olan sayfalara navgtion prop olarak gelir
+    // ve eski sayfalara dönebilmek için aşşağıdaki yöntemi kullanabiliriz
+    // addplace de bir sayfadır ve onun yanında o sayfaya paramatre passleyebilirzi
+    navigation.navigate("AddPlace ", {
+      pickedLat: selectedLocation.lat,
+      pickedLng: selectedLocation.lng,
+    });
+  }, [navigation, selectedLocation]);
+
+  // uselayouteffect ilk defa çaşıltığında bu fonks çaıştırır
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: ({ tintColor }) => (
+        <IconButton
+          icon="save"
+          size={24}
+          color={tintColor}
+          onPress={savePickedLocationHandler}
+        />
+      ),
+    });
+  }, [navigation, savePickedLocationHandler]);
 
   return (
     <MapView
